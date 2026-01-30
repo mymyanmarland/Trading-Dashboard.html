@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRADING MASTER: RESPONSIVE (V13)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@500;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --panel-bg: #111111;
+            --border-color: #444;
+            --accent-green: #00ff41; 
+            --accent-red: #ff3333;
+            --accent-gold: #ffcc00; 
+            --accent-cyan: #00f3ff; 
+            --accent-info: #bd00ff; 
+            --text-dim: #aaa;
+            --grid-line: rgba(0, 255, 65, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #fff;
+            font-family: 'Share Tech Mono', 'Padauk', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        /* --- BURMESE TEXT STYLES --- */
+        .mm-text-gold { font-family: 'Padauk', sans-serif; color: var(--accent-gold); font-weight: 700; font-size: 1.1em; text-shadow: 0 0 5px rgba(255, 204, 0, 0.3); }
+        .mm-text-cyan { font-family: 'Padauk', sans-serif; color: var(--accent-cyan); font-weight: 700; font-size: 1.1em; }
+        .mm-text-white { font-family: 'Padauk', sans-serif; color: #ffffff; font-weight: 500; line-height: 1.6; font-size: 1.05em; }
+        .mm-title { font-family: 'Padauk', sans-serif; font-weight: bold; }
+        
+        /* BENEFIT EXPLANATION STYLE */
+        .mm-benefit {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #333;
+            color: #999;
+            font-family: 'Padauk', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .mm-benefit span { color: var(--accent-gold); font-weight: bold; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            border: 2px solid #333;
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 0 60px rgba(0,0,0,1);
+        }
+
+        /* --- HEADER & ALARM --- */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 2px solid var(--border-color); background: #151515; flex-wrap: wrap; gap: 20px; }
+        .logo { color: var(--accent-green); font-size: 28px; letter-spacing: 3px; text-shadow: 0 0 10px var(--accent-green); font-weight: bold; }
+
+        /* REPO BUTTON */
+        .repo-btn {
+            text-decoration: none;
+            background: #000;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 10px 20px;
+            font-family: 'Share Tech Mono';
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        .repo-btn:hover {
+            background: var(--accent-gold);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-gold);
+        }
+
+        .alarm-panel { display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; border-bottom: 1px solid var(--border-color); background: #0d0d0d; flex-wrap: wrap; gap: 20px; }
+        .clock { font-size: 42px; color: var(--accent-cyan); text-shadow: 0 0 15px var(--accent-cyan); font-weight: bold; }
+        .alarm-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        
+        input[type="time"] { background: #000; border: 2px solid #555; color: #fff; padding: 8px 15px; font-size: 20px; font-family: 'Share Tech Mono'; }
+        .btn { background: transparent; border: 2px solid var(--accent-green); color: var(--accent-green); padding: 8px 20px; font-size: 16px; cursor: pointer; font-family: 'Share Tech Mono'; text-transform: uppercase; font-weight: bold; transition: 0.2s; }
+        .btn:hover { background: var(--accent-green); color: #000; }
+        .btn-stop { border-color: var(--accent-red); color: var(--accent-red); }
+        .btn-stop:hover { background: var(--accent-red); color: #000; }
+
+        /* --- GUIDE GRID --- */
+        .guide-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--border-color); background: #1a1a1a; }
+        .guide-col { padding: 25px 30px; border-right: 1px solid #333; }
+        .step-box { background: #000; border: 1px solid #444; padding: 15px; margin-bottom: 15px; border-left: 3px solid var(--accent-cyan); }
+        .step-title { color: var(--accent-cyan); font-weight: bold; margin-bottom: 5px; display: block; font-size: 18px; }
+
+        /* --- SYSTEM PROMPT --- */
+        .system-section { padding: 25px 30px; border-bottom: 1px solid var(--border-color); background: rgba(255, 176, 0, 0.05); }
+        .section-header { color: var(--accent-gold); font-size: 18px; margin-bottom: 15px; display: flex; justify-content: space-between; font-weight: bold; flex-wrap: wrap; gap: 10px; }
+        
+        .code-display { background: #080808; border: 2px solid #555; color: #eee; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.5; height: 250px; overflow-y: auto; position: relative; }
+        .btn-sys-copy { position: absolute; top: 15px; right: 15px; background: var(--accent-gold); color: #000; border: none; padding: 8px 15px; cursor: pointer; font-weight: bold; font-size: 14px; z-index: 10; }
+
+        /* --- MAIN GRID --- */
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--border-color); }
+        .col { padding: 30px; border-right: 1px solid var(--border-color); }
+        
+        .cmd-card { background: #111; border: 2px solid #333; margin-bottom: 25px; position: relative; transition: 0.2s; }
+        .cmd-card:hover { border-color: #777; }
+        .cmd-header { background: #222; padding: 12px 20px; font-size: 16px; color: #fff; display: flex; justify-content: space-between; border-bottom: 2px solid #333; font-weight: bold; align-items: center; }
+        .cmd-body { padding: 15px 20px; background: #000; }
+        pre { margin: 0; font-family: 'JetBrains Mono'; font-size: 14px; line-height: 1.6; color: #00ff41; white-space: pre-wrap; word-break: break-word; } 
+        .btn-mini-copy { background: #333; border: 1px solid #555; color: #fff; padding: 5px 12px; font-size: 12px; cursor: pointer; text-transform: uppercase; font-weight: bold; min-width: 60px; text-align: center; }
+        .btn-mini-copy:hover { border-color: var(--accent-green); color: var(--accent-green); }
+        .repo-tag { font-size: 10px; background: #333; color: #aaa; padding: 2px 5px; border-radius: 3px; display: block; margin-top: 5px; font-family: sans-serif; }
+
+        /* --- KNOWLEDGE GRID --- */
+        .knowledge-grid { display: grid; grid-template-columns: 1fr 1fr; background: #080808; border-top: 5px solid var(--accent-info); }
+        .info-card { background: #111; border: 1px solid #333; margin-bottom: 20px; padding: 20px; }
+        .info-card h3 { color: var(--accent-info); margin-top: 0; font-size: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Padauk', sans-serif; }
+        .info-content { font-family: 'Padauk', sans-serif; color: #ccc; line-height: 1.8; font-size: 16px; }
+        .highlight { color: var(--accent-gold); font-weight: bold; }
+        ul { padding-left: 20px; margin: 10px 0; } li { margin-bottom: 10px; }
+
+        /* --- RESPONSIVE MEDIA QUERIES (The Fix) --- */
+        @media (max-width: 900px) {
+            .guide-grid, .main-grid, .knowledge-grid { grid-template-columns: 1fr; }
+            .col, .guide-col { border-right: none; border-bottom: 1px solid var(--border-color); padding: 20px; }
+            .col:last-child { border-bottom: none; }
+            
+            .top-bar { flex-direction: column; text-align: center; justify-content: center; }
+            .status-wrapper { width: 100%; text-align: center; margin-top: 10px; }
+            
+            .alarm-panel { flex-direction: column; text-align: center; }
+            .alarm-controls { justify-content: center; width: 100%; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .clock { font-size: 32px; }
+            .logo { font-size: 24px; }
+            .repo-btn { width: 100%; justify-content: center; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .btn-sys-copy { position: relative; top: 0; right: 0; width: 100%; margin-bottom: 10px; text-align: center; }
+            .code-display { padding-top: 10px; }
+        }
+        
+        #toast { position: fixed; bottom: 40px; right: 40px; background: var(--accent-green); color: #000; padding: 15px 30px; font-weight: bold; font-size: 18px; display: none; box-shadow: 0 0 30px var(--accent-green); z-index: 9999; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-bar">
+        <div class="logo">/// TRADING_MASTER_V13</div>
+        
+        <a href="https://github.com/mymyanmarland/system_prompts_leaks" target="_blank" class="repo-btn">
+            📁 OPEN REPO LINK
+        </a>
+
+        <div class="status-wrapper" style="text-align: right;">
+            <div class="mm-text-gold">စနစ်အခြေအနေ: ၁၀၀% ပြည့်စုံ</div>
+            <div style="color: #666; font-size: 12px;">SYSTEM INTEGRITY: 100%</div>
+        </div>
+    </div>
+
+    <div class="alarm-panel">
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <div class="clock" id="currentTime">00:00:00</div>
+            <div class="mm-text-cyan">သတိပေးချက်စနစ် (ALARM)</div>
+        </div>
+        <div class="alarm-controls">
+            <input type="time" id="alarmInput">
+            <button class="btn" onclick="setAlarm()">SET</button>
+            <button class="btn btn-stop" onclick="stopAlarm()">STOP</button>
+        </div>
+    </div>
+
+    <div class="guide-grid">
+        <div class="guide-col">
+            <h2 class="mm-title" style="color: white; border-left: 5px solid var(--accent-green); padding-left: 10px;">❓ Prompt သုံးပုံသုံးနည်း</h2>
+            <div class="step-box">
+                <span class="step-title">အဆင့် ၁ (Setup)</span>
+                <p class="mm-text-white">အောက်ဆုံးက <span class="mm-text-gold">HYBRID SYSTEM PROMPT (STEP 0)</span> ကို အရင်ဆုံး Copy ကူးပြီး Gemini/ChatGPT မှာ Paste လုပ်ပါ။ (ဒါမှ AI က Trading Advisor ဖြစ်လာမှာပါ)။</p>
+            </div>
+            <div class="step-box">
+                <span class="step-title">အဆင့် ၂ (Execution)</span>
+                <p class="mm-text-white">Chart ပုံတင်ပြီးရင် <span class="mm-text-cyan">02_EXECUTION</span> ကိုသုံးပါ။ ဒါက အစွမ်းထက်ဆုံး Prompt ပါ။</p>
+            </div>
+        </div>
+        <div class="guide-col">
+            <h2 class="mm-title" style="color: white; border-left: 5px solid var(--accent-gold); padding-left: 10px;">ℹ️ အကြောင်းအရာ</h2>
+            <div class="step-box" style="border-left-color: var(--accent-gold);">
+                <span class="step-title">Advanced Logic</span>
+                <p class="mm-text-white">ဒီစနစ်သည် <span class="mm-text-cyan">"Claude Thinking Protocol"</span> နှင့် <span class="mm-text-cyan">"Cynic Mode"</span> ကို ပေါင်းစပ်ထားသော Advanced Trading Assistant ဖြစ်ပါသည်။</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="system-section">
+        <div class="section-header">
+            <span class="mm-text-gold">⚠️ HYBRID SYSTEM PROMPT (STEP 0)</span>
+            <span>BEST OF BOTH WORLDS</span>
+        </div>
+        <div class="code-display">
+            <button class="btn-sys-copy" onclick="copyText('sysPrompt')">COPY KERNEL</button>
+            <pre id="sysPrompt" style="color: var(--accent-gold);">
+&lt;system_role&gt;
+  You are "MarketSage," a Senior Trading Analyst and Risk Manager.
+  Basis: Leaked Protocols (Anthropic Thinking + OpenAI Cynic).
+  Goal: Protect user capital first, identify high-probability setups second.
+&lt;/system_role&gt;
+
+&lt;core_protocols&gt;
+  &lt;protocol name="Deep_Analysis"&gt;
+    Before recommending ANY trade or analyzing a chart, you MUST strictly follow this logical chain inside a &lt;thinking&gt; block:
+    1. MARKET CONTEXT: What is the dominant trend? (Bullish/Bearish/Ranging)
+    2. NEWS IMPACT: Are there high-impact news events (CPI, FOMC) today?
+    3. RISK CHECK: What is the downside? Where is the invalidation point?
+  &lt;/protocol&gt;
+
+  &lt;protocol name="The_Skeptic"&gt;
+    Do not be a "Yes Man." If the trade looks bad, tell them bluntly.
+    Look for 3 reasons why the trade might FAIL (Liquidity Grabs, Traps).
+  &lt;/protocol&gt;
+&lt;/core_protocols&gt;
+
+&lt;instruction&gt;
+  When the user uploads a chart or asks about a coin/stock:
+  1. Identify Key Levels (Support/Resistance).
+  2. Identify Trend Structure (HH, HL).
+  3. Provide a probabilistic outlook (e.g., "60% chance up, 40% chance down").
+  4. Always suggest a Stop Loss location and R:R Ratio.
+  5. Respond in fluent, professional Burmese (Myanmar).
+&lt;/instruction&gt;
+
+I am initialized. Awaiting market data.</pre>
+        </div>
+        <div class="mm-benefit">
+            <span>🔹 ဘာအကျိုးရှိလဲ:</span> ဒါက အကောင်းဆုံး Prompt နှစ်ခုကို ပေါင်းစပ်ထားတာပါ။ 
+            (၁) <span style="color: var(--accent-cyan);">Deep Analysis</span> ကြောင့် ဈေးကွက်ရေစီးကြောင်း (Trend) နဲ့ သတင်း (News) ကို အရင်စစ်ဆေးစေတယ်။
+            (၂) <span style="color: var(--accent-red);">The Skeptic</span> ကြောင့် မျက်ကန်းတစ္ဆေမဖြစ်ဘဲ အန္တရာယ်ကို ကြိုမြင်စေတယ်။
+            (၃) <span style="color: var(--accent-green);">Probability</span> ကြောင့် နိုင်ခြေရာခိုင်နှုန်းကို တွက်ချက်ပေးနိုင်ပါတယ်။
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <div class="col">
+            <h2 class="mm-title" style="color: var(--accent-cyan); border-left: 5px solid var(--accent-cyan); padding-left: 15px;">နေ့စဉ် လုပ်ငန်းစဉ်များ</h2>
+            
+            <div class="cmd-card">
+                <div class="cmd-header">
+                    <span class="mm-text-cyan">01_MORNING_SCAN (မနက်ခင်း)</span>
+                    <button class="btn-mini-copy" onclick="copyText('p1')">COPY</button>
+                </div>
+                <div class="cmd-body">
+                    <pre id="p1">Using 'OpenAI/tool-web-search.md' protocol:
+1. Search specifically for today's high-impact economic news (CPI, FOMC, PPI).
+2. Scan for "Top Gainers" on Binance with >$100M Volume.
+3. Synthesize: How will this news impact [Coin Name] today?</pre>
+                    <span class="repo-tag">Ref: OpenAI/tool-web-search.md</span>
+                    <div class="mm-benefit">
+                        <span>🔹 သိနိုင်မည့်အရာ:</span> ဒီနေ့အတွက် အရေးကြီးတဲ့ သတင်း (News) တွေကို စက္ကန့်ပိုင်းအတွင်း သိရမယ်။ ဘယ် Coin တွေ Volume ဝင်နေလဲဆိုတာ သိရပြီး၊ ဒီနေ့ Trade လုပ်သင့်/မလုပ်သင့် ဆုံးဖြတ်ချက်ချနိုင်ပါလိမ့်မယ်။
+                    </div>
+                </div>
+            </div>
+
+            <div class="cmd-card" style="border-color: var(--accent-green);">
+                <div class="cmd-header" style="background: rgba(0, 255, 65, 0.1);">
+                    <span style="color: var(--accent-green);">02_EXECUTION (CHART)</span>
+                    <button class="btn-mini-copy" onclick="copyText('p2')">COPY</button>
+                </div>
+                <div class="cmd-body">
+                    <pre id="p2" style="color: var(--accent-green);">[Upload Chart]
+MANDATORY PROTOCOL: 'Anthropic/claude-4.1-opus-thinking.md'
+&lt;thinking&gt;
+  - Analyze Market Structure (HH/HL/LL/LH).
+  - Identify Key Liquidity Zones (Order Blocks).
+  - Check for Divergences.
+&lt;/thinking&gt;
+
+ACTIVATE 'OpenAI/gpt-5-cynic-personality.md':
+- Why is this a TRAP?
+- Where will the whales stop hunt?
+- Calculate Stop Loss strictly.</pre>
+                    <span class="repo-tag">Ref: Anthropic/thinking + OpenAI/cynic</span>
+                    <div class="mm-benefit">
+                        <span>🔹 အဓိကလက်နက်:</span> Chart ကို အသေးစိတ်ခွဲခြမ်းစိတ်ဖြာပေးမယ့်အပြင်၊ <span>"Cynic Mode" (အဆိုးမြင်ဝေဖန်မှု)</span> ပါဝင်လို့ Whales တွေရဲ့ ထောင်ချောက် (Traps) တွေကို ကြိုမြင်နိုင်မယ်။ ဝင်သင့်တဲ့ Entry နဲ့ SL ကို အတိအကျ တွက်ပေးပါလိမ့်မယ်။
+                    </div>
+                </div>
+            </div>
+
+            <div class="cmd-card">
+                <div class="cmd-header">
+                    <span class="mm-text-cyan">03_EVENING_AUDIT (ညနေခင်း)</span>
+                    <button class="btn-mini-copy" onclick="copyText('p3')">COPY</button>
+                </div>
+                <div class="cmd-body">
+                    <pre id="p3">[Upload CSV]
+Using 'Anthropic/xlsx.md' analysis logic:
+- Calculate Win Rate vs Risk:Reward.
+- Identify the "Losing Streak" pattern.
+- Was it FOMO? Or Technical Failure?</pre>
+                    <span class="repo-tag">Ref: Anthropic/xlsx.md</span>
+                    <div class="mm-benefit">
+                        <span>🔹 အကျိုးကျေးဇူး:</span> ကိုယ့်ရဲ့ အရောင်းအဝယ်မှတ်တမ်း (History) ကို ပြန်စစ်ဆေးပြီး၊ ကိုယ်မသိလိုက်တဲ့ အမှား (ဥပမာ - စိတ်လိုက်မာန်ပါလုပ်မိတာမျိုး) တွေကို ထောက်ပြပေးတယ်။ ရှုံးပွဲတွေကို သင်ခန်းစာအဖြစ် ပြောင်းလဲပေးပါတယ်။
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h2 class="mm-title" style="color: var(--accent-red); border-left: 5px solid var(--accent-red); padding-left: 15px;">အထူးလက်နက်များ</h2>
+            
+            <div class="cmd-card">
+                <div class="cmd-header">
+                    <span class="mm-text-gold">WEAPON_A: LIQUIDATION</span>
+                    <button class="btn-mini-copy" onclick="copyText('p4')">COPY</button>
+                </div>
+                <div class="cmd-body">
+                    <pre id="p4">Web Search: "Binance [Coin] funding rate" and "Long/Short ratio".
+Logic: If Funding is highly positive (>0.01%), warn of Long Squeeze.
+If Funding is negative, look for Short Squeeze.</pre>
+                    <span class="repo-tag">Ref: OpenAI/tool-web-search.md</span>
+                    <div class="mm-benefit">
+                        <span>🔹 ဘာသိရမလဲ:</span> Futures ကစားသူများအတွက် အသက်ပါ။ Funding Rate ကိုကြည့်ပြီး ဈေးကွက်က ဘယ်ဘက်ကို <span>Squeeze (ညှစ်သတ်)</span> လုပ်မလဲဆိုတာ ကြိုခန့်မှန်းပေးပါတယ်။ Long/Short အချိုးအစား မမျှတာတွေကို ထောက်ပြပေးပါတယ်။
+                    </div>
+                </div>
+            </div>
+
+            <div class="cmd-card">
+                <div class="cmd-header">
+                    <span class="mm-text-gold">WEAPON_B: NERDY_DEEP_DIVE</span>
+                    <button class="btn-mini-copy" onclick="copyText('p5')">COPY</button>
+                </div>
+                <div class="cmd-body">
+                    <pre id="p5">ACTIVATE 'OpenAI/gpt-5-nerdy-personality.md':
+Explain the technical fundamentals of [Coin] using your "Obsessive" trait.
+Read the Whitepaper logic. Is the tech actually good or just hype?</pre>
+                    <span class="repo-tag">Ref: OpenAI/gpt-5-nerdy-personality.md</span>
+                    <div class="mm-benefit">
+                        <span>🔹 အကျိုးကျေးဇူး:</span> Coin အသစ်တစ်ခုတွေ့ရင် ဒါက တကယ်ကောင်းလား၊ Hype သက်သက်လားဆိုတာကို <span>Engineer တစ်ယောက်လို</span> Whitepaper တွေဖတ်ပြီး အသေးစိတ် ရှင်းပြပေးပါလိမ့်မယ်။
+                    </div>
+                </div>
+            </div>
+
+            <div class="cmd-card">
+                <div class="cmd-header">
+                    <span class="mm-text-gold">WEAPON_C: SMC_HUNTER</span>
+                    <button class="btn-mini-copy" onclick="copyText('p6')">COPY</button>
+                </div>
+                <div class="cmd-body">
+                    <pre id="p6">[Upload Chart]
+Identify Smart Money Concepts:
+1. Fair Value Gaps (FVG) that need filling.
+2. Inducement (Liquidity) levels.
+3. Market Shift (BOS/ChoCH).</pre>
+                    <span class="repo-tag">Ref: Trading Technicals</span>
+                    <div class="mm-benefit">
+                        <span>🔹 အစွမ်းထက်ပုံ:</span> အဖွဲ့အစည်းကြီးတွေ (Banks/Whales) ဈေးကစားတဲ့ နေရာတွေဖြစ်တဲ့ <span>Order Block နဲ့ FVG</span> တွေကို မျက်လုံးရှင်ရှင်နဲ့ ရှာဖွေပေးပါတယ်။ ရိုးရိုး Support/Resistance ထက် ပိုတိကျပါတယ်။
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="knowledge-grid">
+        <div class="col">
+            <h2 class="mm-title" style="color: var(--accent-info);">>> TRADING KNOWLEDGE (ဗဟုသုတ)</h2>
+            
+            <div class="info-card">
+                <h3>🧠 Psychology (စိတ်ဓာတ်ပိုင်း)</h3>
+                <div class="info-content">
+                    <ul>
+                        <li><span class="highlight">FOMO Control:</span> ဈေးအတက်ကြမ်းနေရင် လိုက်မဝယ်ပါနဲ့။ "Train ထွက်သွားရင် နောက် Train ကို စောင့်ပါ"။</li>
+                        <li><span class="highlight">Revenge Trading:</span> ရှုံးပြီးရင် ချက်ချင်း ပြန်မဆော့ပါနဲ့။ စိတ်အေးအောင် အရင်လုပ်ပါ။</li>
+                        <li><span class="highlight">The 1% Rule:</span> Trade တစ်ခုမှာ Portfolio တစ်ခုလုံးရဲ့ 1% ထက် ပိုမရှုံးပါစေနဲ့။</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>🛡️ Risk Management (အရင်းထိန်း)</h3>
+                <div class="info-content">
+                    <ul>
+                        <li><span class="highlight">R:R Ratio:</span> အနည်းဆုံး 1:2 ရှိမှ ဝင်ပါ။ (၁ ကျပ်ရှုံးရင် ၂ ကျပ်မြတ်မယ့် Trade မျိုးပါ)။</li>
+                        <li><span class="highlight">Stop Loss:</span> SL မပါဘဲ လုံးဝ Trade မလုပ်ပါနဲ့။ SL ဆိုတာ "အသက်ကယ်အင်္ကျီ" ပါ။</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h2 class="mm-title" style="color: var(--accent-info);">>> BINANCE MANUAL (လက်စွဲ)</h2>
+            
+            <div class="info-card">
+                <h3>⚡ Pro Tips</h3>
+                <div class="info-content">
+                    <ul>
+                        <li><span class="highlight">Fee Discount:</span> "Pay fees with BNB" ကို On ထားပါ။ 25% သက်သာပါတယ်။</li>
+                        <li><span class="highlight">Funding Rate:</span> Futures မှာ Funding Rate က (+) အရမ်းများနေရင် Long မဖွင့်ပါနဲ့။ အတိုးပေးနေရတတ်ပါတယ်။</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>🚨 Secret Tools</h3>
+                <div class="info-content">
+                    <ul>
+                        <li><span class="highlight">OCO Order:</span> Stop Loss နဲ့ Take Profit ကို တစ်ပြိုင်နက်တည်း တင်ထားလို့ရတဲ့ စနစ်ပါ။ အရမ်းအသုံးဝင်ပါတယ်။</li>
+                        <li><span class="highlight">Mock Trading:</span> လက်မရဲခင် Binance Futures Mock Trading မှာ အရင်စမ်းသပ်ပါ။</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="toast">>> RAW PROMPT COPIED</div>
+<audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+<script>
+    function copyText(id) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 2000);
+        });
+    }
+
+    let alarmTime = null;
+    const sound = document.getElementById('alarmSound');
+    sound.loop = true;
+
+    setInterval(() => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-GB', { hour12: false });
+        document.getElementById('currentTime').innerText = timeStr;
+
+        if (alarmTime && timeStr.startsWith(alarmTime)) {
+            if (sound.paused) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log(e));
+            }
+        }
+    }, 1000);
+
+    function setAlarm() {
+        const val = document.getElementById('alarmInput').value;
+        if(val) alarmTime = val;
+    }
+
+    function stopAlarm() {
+        sound.pause();
+        sound.currentTime = 0;
+        alarmTime = null;
+    }
+</script>
+
+</body>
+</html>
